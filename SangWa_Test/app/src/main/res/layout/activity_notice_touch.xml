@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="10">
+
+
+    <TextView
+        android:id="@+id/textnotice"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="공지사항"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="8"
+        android:weightSum="10">
+
+
+        <TextView
+            android:id="@+id/textdate"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="등록일"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/textid"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="작성자"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/textcontent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="내용"
+            android:layout_weight="8"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/backkey"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="돌아가기" />
+
+
+</LinearLayout>
