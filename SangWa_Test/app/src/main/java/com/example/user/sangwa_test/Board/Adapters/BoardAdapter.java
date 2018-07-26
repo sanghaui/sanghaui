@@ -1,20 +1,20 @@
 package com.example.user.sangwa_test.Board.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.user.sangwa_test.Board.DTO.BoardDTO;
 import com.example.user.sangwa_test.Board.DTO.SangWaDTO;
 import com.example.user.sangwa_test.R;
 
 import java.util.ArrayList;
 
 public class BoardAdapter extends BaseAdapter {
-    ArrayList<SangWaDTO> boardItems = new ArrayList<SangWaDTO>();
+    ArrayList<SangWaDTO> boardItems = new ArrayList<>();
 
            //빈생성자
     public BoardAdapter() {
@@ -56,9 +56,10 @@ public class BoardAdapter extends BaseAdapter {
         TextView dateText= (TextView) convertView.findViewById(R.id.dateText) ;
 
         SangWaDTO item = boardItems.get(position);
+        Log.d("어뎁터","제목:"+item.getTitle()+"작성일"+item.getDate());
         titleText.setText(item.getTitle());
         idText.setText(item.getId());
-        dateText.setText(item.getContent());
+        dateText.setText(item.getDate());
 
         return convertView;
     }

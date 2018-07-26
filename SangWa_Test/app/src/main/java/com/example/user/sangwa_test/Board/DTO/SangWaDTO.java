@@ -8,7 +8,7 @@ public class SangWaDTO {
     private String date;
     private String reply;
     private String like;
-    private int readCount;
+    private String readCount;
     private String imgRes;
 
 
@@ -21,7 +21,14 @@ public class SangWaDTO {
         this.date = date;
     }
 
-//getter & setter
+    public SangWaDTO(String id, String title, String content, String date) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.date = date;
+    }
+
+    //getter & setter
 
 
     public String getId() {
@@ -80,11 +87,11 @@ public class SangWaDTO {
         this.like = like;
     }
 
-    public int getReadCount() {
+    public String getReadCount() {
         return readCount;
     }
 
-    public void setReadCount(int readCount) {
+    public void setReadCount(String readCount) {
         this.readCount = readCount;
     }
 

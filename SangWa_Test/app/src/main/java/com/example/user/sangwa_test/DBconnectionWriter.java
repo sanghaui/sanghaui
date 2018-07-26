@@ -26,7 +26,7 @@ public class DBconnectionWriter extends AsyncTask<Void,Void,Void>{
     private String date;
     private String reply;
     private String like;
-    private int readCount;
+    private String readCount;
     private String imgRes;
 
     @Override

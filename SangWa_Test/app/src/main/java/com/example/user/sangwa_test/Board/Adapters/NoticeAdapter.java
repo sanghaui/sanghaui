@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class NoticeAdapter extends BaseAdapter {
     ArrayList<NoticeDTO> NoticeItems = new ArrayList<NoticeDTO>();
-        //빈생성자
+    //빈생성자
     public NoticeAdapter() {}
 
 

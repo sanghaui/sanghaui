@@ -35,14 +35,14 @@ public class BoardItemView extends LinearLayout{
 
     }
 
-    public  void setTitleText(String title){
-        titleText.setText(title);
+    public  void setTitleText(String titlete){
+        titleText.setText(titlete);
     }
-    public  void setDateText(String content){
-        dateText.setText(content);
+    public  void setDateText(String dateTe){
+        dateText.setText(dateTe);
     }
-    public  void setIdText(String writer){
-        idText.setText(writer);
+    public  void setIdText(String idTe){
+        this.idText.setText(idTe);
     }
 
 
