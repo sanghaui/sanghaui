@@ -1,10 +1,14 @@
 package com.example.user.sangwa_test;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.user.sangwa_test.Board.Adapters.BoardAdapter;
 import com.example.user.sangwa_test.Board.DTO.SangWaDTO;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -35,7 +39,15 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
     private String like;
     private String readCount;
     private String imgRes;
+    private int index;
+    private Context context;
+
     /*BoardAdapter adapter = new BoardAdapter();*/
+
+   /* public void setContext(Context context){
+     this.context = context;
+    }*/
+
 
     ArrayList<SangWaDTO> sangWaDTOArrayList = new ArrayList<>();
 
@@ -45,7 +57,7 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
         super.onPreExecute();
     }
 
-    public void insert(SangWaDTO dto){
+    /*public void insert(SangWaDTO dto) {
         this.id = dto.getId();
         this.pw = dto.getPw();
         this.title = dto.getTitle();
@@ -55,22 +67,22 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
         this.like = dto.getLike();
         this.readCount = dto.getReadCount();
         this.imgRes = dto.getImgRes();
-    }
+    }*/
 
     @Override
     protected ArrayList<SangWaDTO> doInBackground(Void... Void) {
-        inconfig ="http://192.168.0.109:8989";
-        postURL=inconfig+"/app/anAllList";
+        inconfig = "http://192.168.0.109:8989";
+        postURL = inconfig + "/app/anAllList";
         try {
             HttpClient client = new DefaultHttpClient();
-            Log.d("접속",postURL);
+            Log.d("접속", postURL);
             HttpPost post = new HttpPost(postURL);
             ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
 
             UrlEncodedFormEntity ent = new UrlEncodedFormEntity(params, HTTP.UTF_8);
             post.setEntity(ent);
             HttpResponse responsePost = client.execute(post);   //서버로 값을 던짐
-            Log.d("접속","데이터전송완료");
+            Log.d("접속", "데이터전송완료");
 
             //데이터 받아옴
             InputStream is = responsePost.getEntity().getContent();
@@ -79,33 +91,43 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
             NodeList descNodes = doc.getElementsByTagName("list");
 
             for (int i = 0; i < descNodes.getLength(); i++) {
-                String id = "", name = "", date = "", image = "";
+                String id = "", date = "", image = "";
                 for (Node node = descNodes.item(i).getFirstChild();
                      node != null;
                      node = node.getNextSibling()) {
 
                     //첫번째 자식을 시작으로 마지막까지 다음 형제를 실행
-                    if (node.getNodeName().equals("b_id")) {
+                    if (node.getNodeName().equals("index")) {
+                        index = Integer.parseInt(node.getTextContent());
+                    } else if (node.getNodeName().equals("b_id")) {
                         id = node.getTextContent();
-                    } else if (node.getNodeName().equals("b_title")) {
+                    }else if (node.getNodeName().equals("b_title")) {
                         title = node.getTextContent();
-                    } else if (node.getNodeName().equals("b_date")) {
+                    } else if (node.getNodeName().equals("b_content")) {
+                        content = node.getTextContent();
+                    }else if (node.getNodeName().equals("b_date")) {
                         date = node.getTextContent();
-                    /*}else if (node.getNodeName().equals("image")) {
-                        image = node.getTextContent();*/
+                    }else if (node.getNodeName().equals("b_reply")) {
+                        reply = node.getTextContent();
+                    }else if (node.getNodeName().equals("b_like")) {
+                        like = node.getTextContent();
+                    }else if (node.getNodeName().equals("readCount")) {
+                        readCount = node.getTextContent();
+                    }else if (node.getNodeName().equals("imgRes")) {
+                        imgRes = node.getTextContent();
                     }
-                        Log.d("DB에서받은값","title:"+title+",id:"+id+",date:"+date);
+                    Log.d("DB에서받은값", "title:" + title + ",id:" + id + ",date:" + date+",title:"+title+",content:"+content+",rep:"+reply+",img:"+imgRes);
                 }
                 if (!id.equals("")) {
-                    sangWaDTOArrayList.add(new SangWaDTO(id, title, date));
+                    sangWaDTOArrayList.add(new SangWaDTO(index,id,title,content,date,reply,like,readCount,imgRes));
                     /*adapter.addItems(new SangWaDTO(id, name, date));*/
                 }
             }
             /*Log.d("Sub1", "" + sangWaDTOArrayList.size());*/
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            Log.d("접속","디비커넥션 오류");
+            Log.d("접속", "디비커넥션 오류");
         }
 
         return sangWaDTOArrayList;
@@ -125,4 +147,20 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
         }
         return doc;
     }
+
+   /* public void imageLoader() {
+        //이미지 로드 메서드
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.blank) // 기본이미지
+                .showImageForEmptyUri(R.drawable.blank) // 주소가 없을 경우
+                .showImageOnFail(R.drawable.blank)// 실패했을 경우
+                .build();
+
+        ImageLoaderConfiguration config =
+                new ImageLoaderConfiguration.Builder(context)
+                        .defaultDisplayImageOptions(options)
+                        .build();
+        imageLoader.getInstance().init(config);
+    }*/
+
 }

@@ -1,5 +1,6 @@
 package com.example.user.sangwa_test.Board;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,13 +28,14 @@ public class BoardFragment extends Fragment {
     BoardAdapter adapter;
     ListView boardList;
     ArrayList<SangWaDTO> dtolist = new ArrayList<>();
+    Context context;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup board = (ViewGroup) inflater.inflate(R.layout.board_fragment, container, false);
-
-        getList();
+        /*context =board.getContext();*/
+        /*getList(context);*/
 
         //리스트 할당
         boardList = board.findViewById(R.id.boardList);
@@ -71,17 +73,17 @@ public class BoardFragment extends Fragment {
 
     @Override
     public void onResume() {
-        getList();
+        getList(context);
         Log.d("재시작","리스트 다시 불러옴");
         boardList.setAdapter(adapter);
         super.onResume();
     }
 
 
-    public void getList(){
+    public void getList(Context context){
         //DB에서 값 받아옴
         DBconnectionreader reader = new DBconnectionreader();
-
+        /*reader.setContext(context);*/
         try {
             dtolist=reader.execute().get();
             Log.d("반환값", String.valueOf(dtolist.size()));
@@ -96,11 +98,17 @@ public class BoardFragment extends Fragment {
 
         //배열을 풀어 각각에 리스트에 삽입
         for(int i = 0 ; i < dtolist.size() ; i++){
+            int index = dtolist.get(i).getIndex();
             String id = dtolist.get(i).getId();
             String title = dtolist.get(i).getTitle();
             String date =dtolist.get(i).getDate();
+            String content =dtolist.get(i).getContent();
+            String reply=dtolist.get(i).getReply();
+            String like=dtolist.get(i).getLike();
+            String readCount=dtolist.get(i).getReadCount();
+            String imgRes=dtolist.get(i).getImgRes();
             Log.d("게시판글","아이디:"+id+",제목:"+title+",시간:"+date);
-            adapter.addItems(new SangWaDTO(id,title,date));
+            adapter.addItems(new SangWaDTO(index,id,title,content,date,reply,like,readCount,imgRes));
         }
     }
 }

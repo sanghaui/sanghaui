@@ -28,6 +28,10 @@ public class DBconnectionWriter extends AsyncTask<Void,Void,Void>{
     private String like;
     private String readCount;
     private String imgRes;
+    private String encodedImage;
+
+
+    private String uploadPathA;
 
     @Override
     protected void onPreExecute() {
@@ -45,6 +49,7 @@ public class DBconnectionWriter extends AsyncTask<Void,Void,Void>{
         this.like = dto.getLike();
         this.readCount = dto.getReadCount();
         this.imgRes = dto.getImgRes();
+        this.encodedImage = dto.getEncodedImage();
     }
 
     @Override
@@ -54,7 +59,9 @@ public class DBconnectionWriter extends AsyncTask<Void,Void,Void>{
             Log.d("데이터값",content);
             Log.d("데이터값",title);
         inconfig ="http://192.168.0.109:8989";
-        postURL=inconfig+"/app/anInsert";
+        postURL=inconfig+"/app/BoardInsert";
+        //서버에 저장될 이미지 주소 값 설정
+        uploadPathA = inconfig + "/app/resources/images/upload/"+ imgRes;
         try {
             HttpClient client = new DefaultHttpClient();
             Log.d("접속",postURL);
@@ -65,18 +72,18 @@ public class DBconnectionWriter extends AsyncTask<Void,Void,Void>{
             params.add(new BasicNameValuePair("pw",pw));
             params.add(new BasicNameValuePair("content",content));
             params.add(new BasicNameValuePair("title",title));
-
-            Log.d("접속","파람설정완료");
+            params.add(new BasicNameValuePair("imagePath",uploadPathA));
+            params.add(new BasicNameValuePair("imageData",encodedImage));
+            Log.d("게시판전송","encodedImage:"+encodedImage+"uploadPathA:"+uploadPathA);
+            Log.d("게시판전송","파람설정완료");
             UrlEncodedFormEntity ent = new UrlEncodedFormEntity(params, HTTP.UTF_8);
             post.setEntity(ent);
             HttpResponse responsePost = client.execute(post);   //서버로 값을 던짐
-            Log.d("접속","데이터전송완료");
+            Log.d("게시판전송","데이터전송완료");
         }catch (Exception e){
             e.printStackTrace();
             Log.d("접속","디비커넥션 오류");
         }
-
-
 
         return null;
     }
