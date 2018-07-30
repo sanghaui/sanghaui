@@ -104,8 +104,10 @@ public class Update_Activity extends AppCompatActivity {
                 dto.setPw(editpw.getText().toString());
                 dto.setImgRes(uploadFileName);
                 dto.setEncodedImage(encodedImage);
+
                 DBconnectionUpdater db = new DBconnectionUpdater();
                 db.insert(dto);
+                db.setBeforeImage(imgRes);
                 db.execute();
                 finish();
             }

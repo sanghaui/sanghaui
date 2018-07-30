@@ -29,6 +29,7 @@ public class DBconnectionUpdater extends AsyncTask<Void,Void,Void>{
     private String readCount;
     private String imgRes;
     private String encodedImage;
+    private String beforeImage;
 
 
     private String uploadPathA;
@@ -74,7 +75,8 @@ public class DBconnectionUpdater extends AsyncTask<Void,Void,Void>{
             params.add(new BasicNameValuePair("title",title));
             params.add(new BasicNameValuePair("imagePath",uploadPathA));
             params.add(new BasicNameValuePair("imageData",encodedImage));
-            Log.d("게시판전송","encodedImage:"+encodedImage+"uploadPathA:"+uploadPathA);
+            params.add(new BasicNameValuePair("beforeImage",beforeImage));
+            Log.d("게시판전송","encodedImage:"+encodedImage+"beforeImage:"+beforeImage);
             Log.d("게시판전송","파람설정완료");
             UrlEncodedFormEntity ent = new UrlEncodedFormEntity(params, HTTP.UTF_8);
             post.setEntity(ent);
@@ -86,5 +88,10 @@ public class DBconnectionUpdater extends AsyncTask<Void,Void,Void>{
         }
 
         return null;
+    }
+
+
+    public void setBeforeImage(String beforeImage) {
+        this.beforeImage = beforeImage;
     }
 }
