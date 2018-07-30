@@ -1,11 +1,14 @@
 package com.example.user.sangwa_test.Board;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.ListView;
 
 import com.example.user.sangwa_test.Board.Adapters.BoardAdapter;
 import com.example.user.sangwa_test.Board.DTO.SangWaDTO;
+import com.example.user.sangwa_test.DBconnectionDeleter;
 import com.example.user.sangwa_test.DBconnectionreader;
 import com.example.user.sangwa_test.R;
 
@@ -29,13 +33,19 @@ public class BoardFragment extends Fragment {
     ListView boardList;
     ArrayList<SangWaDTO> dtolist = new ArrayList<>();
     Context context;
+    SangWaDTO dto;
+    DBconnectionDeleter deleter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup board = (ViewGroup) inflater.inflate(R.layout.board_fragment, container, false);
-        /*context =board.getContext();*/
+
+        /*MainActivity activity = (MainActivity) getActivity();*/
+
+        /*context =activity.getApplicationContext();*/
         /*getList(context);*/
+
 
         //리스트 할당
         boardList = board.findViewById(R.id.boardList);
@@ -45,7 +55,7 @@ public class BoardFragment extends Fragment {
         boardList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SangWaDTO dto = (SangWaDTO) adapter.getItem(position);
+                dto = (SangWaDTO) adapter.getItem(position);
                 Intent boardTouch = new Intent(getContext(), BoardTouchActivity.class);
                 /*boardTouch.putExtra("tag", "touch");*/
                 boardTouch.putExtra("id",dto.getId());
@@ -57,6 +67,55 @@ public class BoardFragment extends Fragment {
             }
         });
 
+        //리스트 선택 삭제 처리
+        boardList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                deleter = new DBconnectionDeleter();
+                dto = (SangWaDTO) adapter.getItem(position);
+
+                Intent intent = new Intent(getContext(),ModiDel.class);
+                intent.putExtra("index",dto.getIndex());
+                intent.putExtra("id",dto.getId());
+                intent.putExtra("title",dto.getTitle());
+                intent.putExtra("content",dto.getContent());
+                intent.putExtra("imgRes",dto.getImgRes());
+                startActivity(intent);
+                /*AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle("선택하신 글을 삭제합니다");
+                builder.setMessage("삭제 하시겠습니까?");
+                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("롱터치","예버튼"+dto.getIndex());
+                        deleter.insert(dto.getIndex());
+                        deleter.execute();
+                        refresh();
+                    }
+                });
+                builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("롱터치","아니오버튼");
+                    }
+                });
+                builder.show();*/
+                return true;
+            }
+        });
+
+
+        boardList.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+
+                return false;
+            }
+        });
+
+
         //글쓰기버튼
         writeButton = board.findViewById(R.id.writeButton);
         writeButton.setOnClickListener(new View.OnClickListener() {
@@ -66,8 +125,6 @@ public class BoardFragment extends Fragment {
                 startActivity(writer);
             }
         });
-
-
         return board;
     }
 
@@ -107,9 +164,16 @@ public class BoardFragment extends Fragment {
             String like=dtolist.get(i).getLike();
             String readCount=dtolist.get(i).getReadCount();
             String imgRes=dtolist.get(i).getImgRes();
-            Log.d("게시판글","아이디:"+id+",제목:"+title+",시간:"+date);
+            Log.d("게시판글","인덱스:"+index+",제목:"+title+",시간:"+date);
             adapter.addItems(new SangWaDTO(index,id,title,content,date,reply,like,readCount,imgRes));
         }
+    }
+
+    //프래그먼트 갱신
+    public void refresh(){
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.detach(this).attach(this).commit();
+
     }
 }
 
