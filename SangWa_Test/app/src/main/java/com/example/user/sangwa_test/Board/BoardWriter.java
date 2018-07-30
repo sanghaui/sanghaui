@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -78,11 +79,12 @@ public class BoardWriter extends AppCompatActivity {
         imageLoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath() + "/cordi/mix/");
                 Intent intent = new Intent();
-                intent.setType("image/*");
+                intent.setDataAndType(uri,"image/*");
+                /*intent.setType("image/*");*/
                 intent.setAction(intent.ACTION_PICK);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), LOAD_IMAGE);
-
             }
         });
         cancel = findViewById(R.id.cancel);
