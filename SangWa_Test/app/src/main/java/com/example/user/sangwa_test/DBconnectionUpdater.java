@@ -30,6 +30,7 @@ public class DBconnectionUpdater extends AsyncTask<Void,Void,Void>{
     private String imgRes;
     private String encodedImage;
     private String beforeImage;
+    private String index;
 
 
     private String uploadPathA;
@@ -51,6 +52,7 @@ public class DBconnectionUpdater extends AsyncTask<Void,Void,Void>{
         this.readCount = dto.getReadCount();
         this.imgRes = dto.getImgRes();
         this.encodedImage = dto.getEncodedImage();
+        this.index = String.valueOf(dto.getIndex());
     }
 
     @Override
@@ -69,6 +71,7 @@ public class DBconnectionUpdater extends AsyncTask<Void,Void,Void>{
             HttpPost post = new HttpPost(postURL);
             ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
             //값추가
+            params.add(new BasicNameValuePair("index",index));
             params.add(new BasicNameValuePair("id",id));
             params.add(new BasicNameValuePair("pw",pw));
             params.add(new BasicNameValuePair("content",content));

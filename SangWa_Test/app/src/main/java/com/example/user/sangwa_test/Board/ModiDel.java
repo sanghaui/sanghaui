@@ -11,7 +11,6 @@ import android.widget.Button;
 
 import com.example.user.sangwa_test.DBconnectionDeleter;
 import com.example.user.sangwa_test.R;
-import com.example.user.sangwa_test.Update_Activity;
 
 public class ModiDel extends AppCompatActivity {
     Button modify, delete;

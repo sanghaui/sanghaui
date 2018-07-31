@@ -41,7 +41,7 @@
         <activity
             android:name=".Board.ModiDel"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
-        <activity android:name=".Update_Activity"></activity>
+        <activity android:name=".Board.Update_Activity"></activity>
     </application>
 
 </manifest>

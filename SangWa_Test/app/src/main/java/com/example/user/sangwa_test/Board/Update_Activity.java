@@ -1,4 +1,4 @@
-package com.example.user.sangwa_test;
+package com.example.user.sangwa_test.Board;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.example.user.sangwa_test.Board.DTO.SangWaDTO;
+import com.example.user.sangwa_test.DBconnectionUpdater;
+import com.example.user.sangwa_test.R;
 import com.kosalgeek.android.photoutil.ImageBase64;
 import com.kosalgeek.android.photoutil.ImageLoader;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -104,6 +106,8 @@ public class Update_Activity extends AppCompatActivity {
                 dto.setPw(editpw.getText().toString());
                 dto.setImgRes(uploadFileName);
                 dto.setEncodedImage(encodedImage);
+                dto.setIndex(index);
+
 
                 DBconnectionUpdater db = new DBconnectionUpdater();
                 db.insert(dto);

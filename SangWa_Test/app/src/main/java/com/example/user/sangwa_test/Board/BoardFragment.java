@@ -1,21 +1,24 @@
 package com.example.user.sangwa_test.Board;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.example.user.sangwa_test.Board.Adapters.BoardAdapter;
 import com.example.user.sangwa_test.Board.DTO.SangWaDTO;
@@ -35,21 +38,76 @@ public class BoardFragment extends Fragment {
     Context context;
     SangWaDTO dto;
     DBconnectionDeleter deleter;
+    Spinner b_spinner;
+    EditText searchText;
+    String searchTextresult;
+    ArrayAdapter<CharSequence> spinnerAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup board = (ViewGroup) inflater.inflate(R.layout.board_fragment, container, false);
-
         /*MainActivity activity = (MainActivity) getActivity();*/
 
         /*context =activity.getApplicationContext();*/
-        /*getList(context);*/
+        getList();
+        //리스트 검색
+
+
+        //스피너 설정
+        String[] b_list = {"제목", "작성자", "내용"};
+        b_spinner = board.findViewById(R.id.b_spinner);
+        spinnerAdapter= new ArrayAdapter<CharSequence>(getActivity(),android.R.layout.simple_spinner_item,b_list);
+        b_spinner.setAdapter(spinnerAdapter);
+        b_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("스피너선택값",b_spinner.getSelectedItem().toString());
+                searchTextresult=b_spinner.getSelectedItem().toString();
+                if(searchTextresult.equals("제목")){
+                    adapter.insertSearch("title");
+                }else if(searchTextresult.equals("작성자")){
+                    adapter.insertSearch("id");
+                }else if(searchTextresult.equals("내용")){
+                    adapter.insertSearch("content");
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
 
         //리스트 할당
         boardList = board.findViewById(R.id.boardList);
         boardList.setAdapter(adapter);
+
+
+        searchText =board.findViewById(R.id.searchText);
+        searchText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable search) {
+                //검색어 변경시 처리
+                String filterText = search.toString();
+                Log.d("검색어 길이",filterText);
+                if(filterText.length()>0){
+                    boardList.setFilterText(filterText);
+                }else{
+                    boardList.clearTextFilter();
+                }
+            }
+        });
 
         //리스트 선택 처리
         boardList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -58,11 +116,13 @@ public class BoardFragment extends Fragment {
                 dto = (SangWaDTO) adapter.getItem(position);
                 Intent boardTouch = new Intent(getContext(), BoardTouchActivity.class);
                 /*boardTouch.putExtra("tag", "touch");*/
+                boardTouch.putExtra("index",dto.getIndex());
                 boardTouch.putExtra("id",dto.getId());
                 boardTouch.putExtra("pw",dto.getPw());
                 boardTouch.putExtra("content",dto.getContent());
                 boardTouch.putExtra("title",dto.getTitle());
                 boardTouch.putExtra("date",dto.getDate());
+                boardTouch.putExtra("imgRes",dto.getImgRes());
                 startActivity(boardTouch);
             }
         });
@@ -82,25 +142,6 @@ public class BoardFragment extends Fragment {
                 intent.putExtra("content",dto.getContent());
                 intent.putExtra("imgRes",dto.getImgRes());
                 startActivity(intent);
-                /*AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle("선택하신 글을 삭제합니다");
-                builder.setMessage("삭제 하시겠습니까?");
-                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d("롱터치","예버튼"+dto.getIndex());
-                        deleter.insert(dto.getIndex());
-                        deleter.execute();
-                        refresh();
-                    }
-                });
-                builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d("롱터치","아니오버튼");
-                    }
-                });
-                builder.show();*/
                 return true;
             }
         });
@@ -114,7 +155,6 @@ public class BoardFragment extends Fragment {
                 return false;
             }
         });
-
 
         //글쓰기버튼
         writeButton = board.findViewById(R.id.writeButton);
@@ -130,17 +170,16 @@ public class BoardFragment extends Fragment {
 
     @Override
     public void onResume() {
-        getList(context);
-        Log.d("재시작","리스트 다시 불러옴");
+        getList();
         boardList.setAdapter(adapter);
+        searchText.setText("");
         super.onResume();
     }
 
 
-    public void getList(Context context){
+    public void getList(){
         //DB에서 값 받아옴
         DBconnectionreader reader = new DBconnectionreader();
-        /*reader.setContext(context);*/
         try {
             dtolist=reader.execute().get();
             Log.d("반환값", String.valueOf(dtolist.size()));
@@ -152,6 +191,7 @@ public class BoardFragment extends Fragment {
 
         //adapter 생성
         adapter = new BoardAdapter();
+        Log.d("어뎁터","생성");
 
         //배열을 풀어 각각에 리스트에 삽입
         for(int i = 0 ; i < dtolist.size() ; i++){
@@ -164,7 +204,7 @@ public class BoardFragment extends Fragment {
             String like=dtolist.get(i).getLike();
             String readCount=dtolist.get(i).getReadCount();
             String imgRes=dtolist.get(i).getImgRes();
-            Log.d("게시판글","인덱스:"+index+",제목:"+title+",시간:"+date);
+            /*Log.d("게시판글","인덱스:"+index+",제목:"+title+",시간:"+date);*/
             adapter.addItems(new SangWaDTO(index,id,title,content,date,reply,like,readCount,imgRes));
         }
     }
