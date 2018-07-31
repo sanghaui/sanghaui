@@ -98,7 +98,7 @@ public class ANDao {
 		return adtos;
 	}
 	
-	public ArrayList<ANDto> anNoticeList(String admin) {		
+	public ArrayList<ANDto> anNoticeList() {		
 		
 		ArrayList<ANDto> adtos = new ArrayList<ANDto>();
 		Connection connection = null;
@@ -110,10 +110,9 @@ public class ANDao {
 
 		try {
 			connection = dataSource.getConnection();
-			String query = "select b_date, b_content, b_title, b_readcount from sangwa where b_id=? order by b_date desc";
+			String query = "select b_num, b_date, b_content, b_title, b_readcount from noticeboard order by b_date desc";
 			
 			prepareStatement = connection.prepareStatement(query);
-			prepareStatement.setString(1, admin);
 			resultSet = prepareStatement.executeQuery();
 			
 			while (resultSet.next()) {				
@@ -129,7 +128,6 @@ public class ANDao {
 //				String imagePath = resultSet.getString("image1"); 
 
 				ANDto adto = new ANDto();
-				adto.setId(admin);
 				adto.setContent(content);;
 				adto.setTitle(title);
 				adto.setDate(date);

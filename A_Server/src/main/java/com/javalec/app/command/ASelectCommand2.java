@@ -13,7 +13,7 @@ public class ASelectCommand2 implements ACommand{
 	@Override
 	public void execute(Model model) {		
 		ANDao adao = new ANDao();
-		ArrayList<ANDto> adtos = adao.anNoticeList("admin");	
+		ArrayList<ANDto> adtos = adao.anNoticeList();	
 		
 		model.addAttribute("anNoticeList", adtos); 
 	}

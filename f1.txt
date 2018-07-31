@@ -1,2 +1,14 @@
-aa
-asdasdasdas
+create table noticeboard (
+b_num number constraint index_pk primary key,
+b_id number,
+b_title varchar2(300),
+b_content varchar2(500),
+b_date date,
+b_readcount number
+);
+
+drop table noticeboard;
+insert into noticeboard values('');
+
+
+select b_num, b_date, b_content, b_title, b_readcount from noticeboard order by b_date desc;
