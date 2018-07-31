@@ -121,40 +121,34 @@ public class AController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}   
-				
+		model.addAttribute("index", req.getParameter("index"));
 		model.addAttribute("id", req.getParameter("id"));
-		model.addAttribute("name", req.getParameter("name"));
-		model.addAttribute("date", req.getParameter("date"));	
+		model.addAttribute("pw", req.getParameter("pw"));
+		model.addAttribute("title", req.getParameter("title"));
+		model.addAttribute("content", req.getParameter("content"));	
 		model.addAttribute("imagePath", req.getParameter("imagePath"));
-		model.addAttribute("pImagePath", req.getParameter("pImagePath"));
-		model.addAttribute("imageData", req.getParameter("imageData"));			
+//		model.addAttribute("pImagePath", req.getParameter("pImagePath"));
+		model.addAttribute("imageData", req.getParameter("imageData"));
+		model.addAttribute("beforeImage", req.getParameter("beforeImage"));
+		System.out.println("이전이미지:"+req.getParameter("beforeImage"));
 		
-		String dbImgPath = req.getParameter("imagePath");		
-		String pImgPath = req.getParameter("pImagePath");
+		String dbImgPath = req.getParameter("imagePath");
+		System.out.println("이미지데이터:"+req.getParameter("imageData"));
+//		String pImgPath = req.getParameter("pImagePath");
 		
-		if(pImgPath == null){
-			pImgPath = "";
-		}
-		
-		System.out.println("id : " + req.getParameter("id"));
-		System.out.println("name : " + req.getParameter("name"));
-		System.out.println("date : " + req.getParameter("date"));
-		System.out.println(dbImgPath + ":" + req.getParameter("imagePath"));		
-		
-		// 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙(占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙)
-		if(!req.getParameter("imagePath").equals(req.getParameter("pImagePath"))){			
-			String fileName = dbImgPath.split("/")[dbImgPath.split("/").length -1];				
+		//이미지 변경 체크
+		if( req.getParameter("imageData").equals("")){
+			System.out.println("컨트롤러:이미지 변경 안됨");
+		}else{
+			System.out.println("컨트롤러:이미지 변경 됨");
+			String fileName = dbImgPath.split("/")[dbImgPath.split("/").length -1];
 			String realImgPath = req.getSession().getServletContext()
 					.getRealPath("/resources/images/upload/" + fileName);
+			System.out.println( dbImgPath + " : " + fileName + " : " + realImgPath);
 			model.addAttribute("realImgPath", realImgPath);
-			
-			String pFileName = pImgPath.split("/")[pImgPath.split("/").length -1];
-			String delImgPath = req.getSession().getServletContext()
-					.getRealPath("/resources/images/upload/" + pFileName);
-			model.addAttribute("pDelImagePath", delImgPath);			
-		}else{
-			model.addAttribute("pDelImagePath", pImgPath);
 		}
+		
+//		System.out.println(dbImgPath + ":" + req.getParameter("imagePath"));		
 		
 		command = new AUpdateCommand();
 		command.execute(model);		

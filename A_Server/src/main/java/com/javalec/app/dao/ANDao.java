@@ -249,9 +249,9 @@ public class ANDao {
 	}
 	
 	
-	public int anUpdate(int id, String name, String date, String imageData, String imagePath, 
-									String pImagePath, String realImgPath, String pDelImagePath) {
-		
+	//이미지가 변경됬을 경우
+	public int anUpdate(String index,String id,String pw,String title,String content,String imageData,String imagePath,String realImgPath,String beforeImage) {
+		System.out.println("DAO:이미지 변경 됨");
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
 		ResultSet resultSet = null;
@@ -259,34 +259,31 @@ public class ANDao {
 		int state = -1;
 
 		try {
-			// 占싱뱄옙占쏙옙 占쏙옙占쏙옙				
 			imageDecorder(imageData, realImgPath);
 			
-			System.out.println("SubUpdate :pDelImagePath => " + pDelImagePath);
-			
-			File delfile = new File(pDelImagePath);
+			//이전파일 삭제
+			File delfile = new File(beforeImage);
             if(delfile.exists()) {
                 System.out.println("Sub1Add:pDelImagePath " + delfile.exists());
                 delfile.delete();
             }			
-			
-						
-			// 占쏙옙占쏙옙占싶븝옙占싱쏙옙 占쏙옙占쏙옙			
 			connection = dataSource.getConnection();
-			String query = "update test2 set " 			             
-			             + " name = '" + name + "' "
-			             + ", hire_date = '" + date + "' "
-			             + ", image1 = '" + imagePath + "' "
-						 + " where id = " + id ;
-			
+			String query = "update sangwa set b_id=?, b_pw=?, b_title=?, b_content=?, image1=? where b_num =?";
+			System.out.println("id"+id+"pw"+pw+"title"+title+"content"+content);
 			prepareStatement = connection.prepareStatement(query);
+			prepareStatement.setString(1, id);
+			prepareStatement.setString(2, pw);
+			prepareStatement.setString(3, title);
+			prepareStatement.setString(4, content);
+			prepareStatement.setString(5, imagePath);
+			prepareStatement.setString(6, index);
 			state = prepareStatement.executeUpdate();
 
 			if (state > 0) {
-				System.out.println("占쏙옙占쏙옙占쏙옙占쏙옙");
+				System.out.println("성공");
 				
 			} else {
-				System.out.println("占쏙옙占쏙옙占쏙옙占쏙옙");
+				System.out.println("실패");
 			}
 
 		} catch (Exception e) {
@@ -313,31 +310,33 @@ public class ANDao {
 		return state;
 
 	}
-	
-public int anUpdate(int id, String name, String date, String imageData, String imagePath, String pImagePath) {
-		
+	//이미지 변경안됬을 경우
+public int anUpdate(String index,String id,String pw,String title,String content,String beforeImage) {
+		System.out.println("이미지 변경 안됨");
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
 		ResultSet resultSet = null;
-		
+		System.out.println("beforeImage:"+beforeImage);
 		int state = -1;
 
 		try {			
-			// 占쏙옙占쏙옙占싶븝옙占싱쏙옙 占쏙옙占쏙옙			
 			connection = dataSource.getConnection();
-			String query = "update test2 set " 			             
-			             + " name = '" + name + "' "
-			             + ", hire_date = '" + date + "' "			             
-						 + " where id = " + id ;
+			String query = "update sangwa set b_id=?, b_pw=?, b_title=?, b_content=?,image1=? where b_num =?";
 			
 			prepareStatement = connection.prepareStatement(query);
+			prepareStatement.setString(1, id);
+			prepareStatement.setString(2, pw);
+			prepareStatement.setString(3, title);
+			prepareStatement.setString(4, content);
+			prepareStatement.setString(5, beforeImage);
+			prepareStatement.setString(6, index);
 			state = prepareStatement.executeUpdate();
 
 			if (state > 0) {
-				System.out.println("占쏙옙占쏙옙占쏙옙占쏙옙");
+				System.out.println("성공");
 				
 			} else {
-				System.out.println("占쏙옙占쏙옙占쏙옙占쏙옙");
+				System.out.println("실패");
 			}
 
 		} catch (Exception e) {
