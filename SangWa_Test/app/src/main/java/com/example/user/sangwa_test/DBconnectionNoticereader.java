@@ -37,6 +37,7 @@ public class DBconnectionNoticereader extends AsyncTask<Void, Void, ArrayList<Sa
     private String like;
     private String readCount;
     private String imgRes;
+    private int index;
     /*BoardAdapter adapter = new BoardAdapter();*/
 
     ArrayList<SangWaDTO> sangWaDTOArrayList = new ArrayList<>();
@@ -57,6 +58,7 @@ public class DBconnectionNoticereader extends AsyncTask<Void, Void, ArrayList<Sa
         this.like = dto.getLike();
         this.readCount = dto.getReadCount();
         this.imgRes = dto.getImgRes();
+        this.index = dto.getIndex();
     }
 
     @Override
@@ -97,6 +99,8 @@ public class DBconnectionNoticereader extends AsyncTask<Void, Void, ArrayList<Sa
                         b_date = node.getTextContent();
                     }else if (node.getNodeName().equals("b_readcount")) {
                         readCount = node.getTextContent();
+                    }else if (node.getNodeName().equals("b_num")) {
+                        index = Integer.parseInt(node.getTextContent());
                     }
                     Log.d("DB에서받은값","title:"+title+",id:"+id+",date:"+b_date);
                 }
