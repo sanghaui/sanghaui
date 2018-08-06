@@ -42,6 +42,25 @@ public class SangWaDTO {
         this.imgRes = imgRes;
     }
 
+    public SangWaDTO(int index, String id, String title, String content, String date, String readCount) {
+        this.index = index;
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        this.readCount = readCount;
+    }
+
+    //리플
+
+    public SangWaDTO(int index, String id, String content, String date) {
+        this.index = index;
+        this.id = id;
+        this.content = content;
+        this.date = date;
+    }
+
+
     //getter & setter
 
 

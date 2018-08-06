@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.user.sangwa_test.Board.Adapters.NoticeAdapter;
-import com.example.user.sangwa_test.Board.DTO.NoticeDTO;
 import com.example.user.sangwa_test.Board.DTO.SangWaDTO;
 import com.example.user.sangwa_test.DBconnectionNoticereader;
 import com.example.user.sangwa_test.R;
@@ -44,6 +43,9 @@ public class NoticeFragment extends Fragment {
                 SangWaDTO dto = (SangWaDTO) adapter.getItem(position);
                 Intent noticeTouch = new Intent(getContext(), NoticeTouchActivity.class);
                 noticeTouch.putExtra("title",dto.getTitle());
+                noticeTouch.putExtra("date",dto.getDate());
+                noticeTouch.putExtra("id",dto.getId());
+                noticeTouch.putExtra("content",dto.getContent());
                 startActivity(noticeTouch);
             }
         });
@@ -55,19 +57,6 @@ public class NoticeFragment extends Fragment {
     public void onResume() {
         adapter =  new NoticeAdapter();
         getList();
-
-
-        noticelist.setAdapter(adapter);
-
-        noticelist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SangWaDTO dto = (SangWaDTO) adapter.getItem(position);
-                Intent noticeTouch = new Intent(getContext(), NoticeTouchActivity.class);
-                noticeTouch.putExtra("title",dto.getTitle());
-                startActivity(noticeTouch);
-            }
-        });
 
         super.onResume();
     }
@@ -92,12 +81,14 @@ public class NoticeFragment extends Fragment {
         //배열을 풀어 각각에 리스트에 삽입
         for(int i = 0 ; i < dtolist.size() ; i++){
             Log.d("공지사항", String.valueOf(dtolist.size()));
+            int index = dtolist.get(i).getIndex();
             String id = dtolist.get(i).getId();
             String title = dtolist.get(i).getTitle();
             String date =dtolist.get(i).getDate();
             String content = dtolist.get(i).getContent();
+            String readcount = dtolist.get(i).getReadCount();
             Log.d("공지사항","아이디:"+id+",제목:"+title+",시간:"+date+",내용"+content);
-            adapter.addItems(new NoticeDTO(title,content,id));
+            adapter.addItems(new SangWaDTO(index,id,title,date,content,readcount));
         }
     }
 

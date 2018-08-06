@@ -7,18 +7,18 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.user.sangwa_test.Board.DTO.NoticeDTO;
+import com.example.user.sangwa_test.Board.DTO.SangWaDTO;
 import com.example.user.sangwa_test.R;
 
 import java.util.ArrayList;
 
 public class NoticeAdapter extends BaseAdapter {
-    ArrayList<NoticeDTO> NoticeItems = new ArrayList<NoticeDTO>();
+    ArrayList<SangWaDTO> NoticeItems = new ArrayList<>();
     //빈생성자
     public NoticeAdapter() {}
 
 
-    public void addItems(NoticeDTO dto) {
+    public void addItems(SangWaDTO dto) {
         NoticeItems.add(dto);
     }
 
@@ -51,10 +51,11 @@ public class NoticeAdapter extends BaseAdapter {
         TextView idText = (TextView) convertView.findViewById(R.id.noticeIdText) ;
         TextView contentText= (TextView) convertView.findViewById(R.id.noticeContentText) ;
 
-        NoticeDTO item = NoticeItems.get(position);
+        SangWaDTO item = NoticeItems.get(position);
         titleText.setText(item.getTitle());
         idText.setText(item.getId());
         contentText.setText(item.getContent());
+
 
         return convertView;
     }

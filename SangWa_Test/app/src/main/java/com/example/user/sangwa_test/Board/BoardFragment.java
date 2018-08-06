@@ -116,7 +116,9 @@ public class BoardFragment extends Fragment {
                 dto = (SangWaDTO) adapter.getItem(position);
                 Intent boardTouch = new Intent(getContext(), BoardTouchActivity.class);
                 /*boardTouch.putExtra("tag", "touch");*/
-                boardTouch.putExtra("index",dto.getIndex());
+                Log.d("보드프레그먼트",String.valueOf(dto.getIndex()));
+                int index = dto.getIndex();
+                boardTouch.putExtra("index",index);
                 boardTouch.putExtra("id",dto.getId());
                 boardTouch.putExtra("pw",dto.getPw());
                 boardTouch.putExtra("content",dto.getContent());
