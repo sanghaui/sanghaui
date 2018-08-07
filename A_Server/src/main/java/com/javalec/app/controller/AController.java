@@ -1,8 +1,5 @@
 package com.javalec.app.controller;
 
-import java.io.File;
-
-
 import java.io.UnsupportedEncodingException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,10 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.javalec.app.command.ACommand;
 import com.javalec.app.command.ADeleteCommand;
-import com.javalec.app.command.BoardInsertCommand;
-import com.javalec.app.command.AnAllListCommand;
 import com.javalec.app.command.ASelectCommand2;
 import com.javalec.app.command.AUpdateCommand;
+import com.javalec.app.command.AnAllListCommand;
+import com.javalec.app.command.AnAllReListCommand;
+import com.javalec.app.command.BoardInsertCommand;
+import com.javalec.app.command.replyInsertCommand;
 
 
 
@@ -38,7 +37,19 @@ public class AController {
 		return "AnAllList";
 	}
 	
-	@RequestMapping(value="/anReg", method = {RequestMethod.GET, RequestMethod.POST}  )
+	@RequestMapping(value="/anReplyList", method = {RequestMethod.GET, RequestMethod.POST}  )
+	public String anReplyList(HttpServletRequest req, Model model){
+		System.out.println("anReplyList");
+		
+		model.addAttribute("parent",req.getParameter("parent"));
+		System.out.println(req.getParameter("parent"));
+		command = new AnAllReListCommand();
+		command.execute(model);
+		
+		return "anReplyList";
+	}
+	
+	@RequestMapping(value="/anReply", method = {RequestMethod.GET, RequestMethod.POST}  )
 	public String anBigFile(MultipartFile file, HttpServletRequest req, Model model){
 		System.out.println("anReg()");
 		
@@ -57,8 +68,8 @@ public class AController {
 //		
 		command = new ASelectCommand2();
 		command.execute(model);		
-//		System.out.println("공지사항 처리됨");
-		return "anNoticeList";
+		System.out.println("공지사항 처리됨");
+		return "AnNoticeList";
 	}
 	
 	@RequestMapping(value="/BoardInsert", method = {RequestMethod.GET, RequestMethod.POST})
@@ -170,5 +181,28 @@ public class AController {
 		command.execute(model);	
 		
 	}
+	
+	@RequestMapping(value="/replyInsert", method = {RequestMethod.GET, RequestMethod.POST})
+	public void replyInsert(HttpServletRequest req, Model model){
+		System.out.println("replyInsert()");
+		//모듈객체는 requese에 객체를 담아서 보낼때 필요함
+        try {
+			req.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}   
+		
+		model.addAttribute("id", req.getParameter("id"));
+		model.addAttribute("content", req.getParameter("content"));	
+		model.addAttribute("index", req.getParameter("index"));	
+		System.out.println(req.getParameter("id"));
+		System.out.println(req.getParameter("content"));
+		System.out.println(req.getParameter("index"));
+		
+		command = new replyInsertCommand();
+		command.execute(model);
+		
+	}	
 
 }

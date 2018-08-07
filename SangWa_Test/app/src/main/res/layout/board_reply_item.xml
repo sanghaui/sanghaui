@@ -11,11 +11,11 @@
 
 
         <TextView
-            android:id="@+id/noticeTitleText"
+            android:id="@+id/noticeIdText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="제목" />
+            android:text="글쓴이" />
 
         <TextView
             android:id="@+id/noticeContentText"
@@ -25,11 +25,12 @@
             android:text="내용" />
 
         <TextView
-            android:id="@+id/noticeIdText"
+            android:id="@+id/noticeDateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="글쓴이" />
+            android:text="작성일" />
+
     </LinearLayout>
 
 

@@ -13,9 +13,10 @@ public class ASelectCommand2 implements ACommand{
 	@Override
 	public void execute(Model model) {		
 		ANDao adao = new ANDao();
+		System.out.println("공지사항 커맨드");
 		ArrayList<ANDto> adtos = adao.anNoticeList();	
 		
-		model.addAttribute("anNoticeList", adtos); 
+		model.addAttribute("AnNoticeList", adtos); 
 	}
 	
 }

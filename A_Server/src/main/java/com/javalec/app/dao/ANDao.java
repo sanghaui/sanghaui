@@ -99,7 +99,7 @@ public class ANDao {
 	}
 	
 	public ArrayList<ANDto> anNoticeList() {		
-		
+		System.out.println("공지사항 DAO");
 		ArrayList<ANDto> adtos = new ArrayList<ANDto>();
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
@@ -110,17 +110,19 @@ public class ANDao {
 
 		try {
 			connection = dataSource.getConnection();
-			String query = "select b_num, b_date, b_content, b_title, b_readcount from noticeboard order by b_date desc";
+			String query = "select b_num, b_date, b_content, b_title, b_readcount from noticeboard order by b_num desc";
 			
 			prepareStatement = connection.prepareStatement(query);
 			resultSet = prepareStatement.executeQuery();
 			
-			while (resultSet.next()) {				
+			while (resultSet.next()) {
+				int index = resultSet.getInt("b_num");
 				String content = resultSet.getString("b_content");
 				String title = resultSet.getString("b_title");
 				Date date = resultSet.getDate("b_date"); 
 				int readcount = resultSet.getInt("b_readcount");
 //				System.out.println("DAO안입니다");
+				System.out.println(resultSet.getInt("b_num"));
 				System.out.println(content);
 				System.out.println(title);
 				System.out.println(date);
@@ -128,6 +130,7 @@ public class ANDao {
 //				String imagePath = resultSet.getString("image1"); 
 
 				ANDto adto = new ANDto();
+				adto.setIndex(index);
 				adto.setContent(content);;
 				adto.setTitle(title);
 				adto.setDate(date);
@@ -407,5 +410,110 @@ public int anUpdate(String index,String id,String pw,String title,String content
 			}
 		}
 		return state;
+	}
+
+	public int anReplyInsert(int index, String id, String content) {
+		
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		
+		int state = 0;
+		try {
+			connection = dataSource.getConnection();
+			String query = "insert into replyboard (r_index, r_id, r_content, r_date, r_parent) values (seq_reply.nextVal,?,?,sysdate,?)";
+			
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, id);
+			preparedStatement.setString(2, content);
+			preparedStatement.setInt(3, index);
+			state = preparedStatement.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return state;
+	}
+
+	public ArrayList<ANDto> anAllRelist() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<ANDto> anAllRelist(int parent) {
+		System.out.println("리플 DAO");
+		ArrayList<ANDto> adtos = new ArrayList<ANDto>();
+		Connection connection = null;
+		PreparedStatement prepareStatement = null;
+		ResultSet resultSet = null;
+		
+		PrintWriter outputStream = null;	
+		int resultSetCnt = 0;
+
+		try {
+			connection = dataSource.getConnection();
+			String query = "select r_index, r_id, r_content, r_date from replyboard where r_parent=? order by r_index desc";
+			
+			prepareStatement = connection.prepareStatement(query);
+			prepareStatement.setInt(1, parent);
+			resultSet = prepareStatement.executeQuery();
+			
+			while (resultSet.next()) {
+				int index = resultSet.getInt("r_index");
+				String id = resultSet.getString("r_id");
+				String content = resultSet.getString("r_content");
+				Date date = resultSet.getDate("r_date"); 
+				System.out.println("리플DAO안입니다");
+				System.out.println(resultSet.getInt("r_index"));
+				System.out.println(content);
+				System.out.println(date);
+
+				ANDto adto = new ANDto();
+				adto.setIndex(index);
+				adto.setId(id);
+				adto.setContent(content);;
+				adto.setDate(date);
+				adtos.add(adto);
+			}		
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				// 占쏙옙占싹쏙옙트占쏙옙 占쌥깍옙
+				if(outputStream != null){
+					outputStream.close();
+				}
+				
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (prepareStatement != null) {
+					prepareStatement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}				
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+
+			}
+		}		
+		return adtos;
 	}	
 }

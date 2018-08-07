@@ -8,28 +8,24 @@
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%	
+<%	//XML형식으로 변환
  	try{
  		out.println("<lists>"); 
 		
-		for(ANDto dto  : (ArrayList<ANDto>)request.getAttribute("AnNoticeList")){
+		for(ANDto dto  : (ArrayList<ANDto>)request.getAttribute("anReplyList")){
 			out.println("<list>");
-			out.println("<b_id>" + dto.getId() + "</b_id>");
-			out.println("<b_num>" + dto.getIndex() + "</b_num>");
-			out.println("<b_title>" + dto.getTitle() + "</b_title>");
-			out.println("<b_content>" + dto.getContent() + "</b_content>");
-			out.println("<b_date>" + dto.getDate() + "</b_date>");
-			out.println("<b_ReadCount>" + dto.getReadCount() + "</b_ReadCount>");
+			out.println("<r_index>" + dto.getIndex() + "</r_index>");
+			out.println("<r_id>" + dto.getId() + "</r_id>");
+			out.println("<r_content>" + dto.getContent() + "</r_content>");
+			out.println("<r_date>" + dto.getDate() + "</r_date>");
 			out.println("</list>");
 		}
  		out.println("</lists>");
  	}catch(Exception e) {
  		System.out.println("select list failed" + e.getMessage());
- 	}	
-
-	System.out.println("anSelect2() is complete !!!");	
-	
-	// 일 끝났다고 클라이언트에 보내자
-	
+ 	}finally{
+ 		System.out.println("전송완료");
+ 	}
+		
 %>
 

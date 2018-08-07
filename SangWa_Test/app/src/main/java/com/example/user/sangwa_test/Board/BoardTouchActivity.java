@@ -15,6 +15,7 @@ import com.example.user.sangwa_test.Board.Adapters.BoardAdapter;
 import com.example.user.sangwa_test.Board.Adapters.BoardReplyAdapter;
 import com.example.user.sangwa_test.Board.DTO.BoardReplyDTO;
 import com.example.user.sangwa_test.Board.DTO.SangWaDTO;
+import com.example.user.sangwa_test.DBconnectionReplyreader;
 import com.example.user.sangwa_test.DBconnectionreader;
 import com.example.user.sangwa_test.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -31,7 +32,8 @@ public class BoardTouchActivity extends AppCompatActivity{
     ListView replyList;
     BoardReplyAdapter adapter;
     ImageView imageView1;
-    ArrayList<SangWaDTO> dtolist;
+    ArrayList<BoardReplyDTO> dtolist;
+    DBconnectionReplyreader reader;
 
 
     //이미지로더
@@ -64,6 +66,9 @@ public class BoardTouchActivity extends AppCompatActivity{
         final Intent intent = getIntent();
         process(intent);
 
+
+
+
         toBoardItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,14 +80,13 @@ public class BoardTouchActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent reply= new Intent(getApplicationContext(),TextrelayActivity.class);
-                Log.d("터치화면부모인덱스",String.valueOf(index));
                 reply.putExtra("index",index);
                 startActivity(reply);
             }
         });
 
         replyList = findViewById(R.id.replyList);
-        adapter = new BoardReplyAdapter();
+        getList();
 
         replyList.setAdapter(adapter);
     }
@@ -140,7 +144,8 @@ public class BoardTouchActivity extends AppCompatActivity{
 
     public void getList(){
         //DB에서 값 받아옴
-        DBconnectionreader reader = new DBconnectionreader();
+        reader = new DBconnectionReplyreader();
+        reader.insert(index);
         try {
             dtolist=reader.execute().get();
             Log.d("반환값", String.valueOf(dtolist.size()));
@@ -158,15 +163,18 @@ public class BoardTouchActivity extends AppCompatActivity{
         for(int i = 0 ; i < dtolist.size() ; i++){
             int index = dtolist.get(i).getIndex();
             String id = dtolist.get(i).getId();
-            String title = dtolist.get(i).getTitle();
-            String date =dtolist.get(i).getDate();
+            String date = dtolist.get(i).getDate();
+            /*String date =dtolist.get(i).getDate();*/
             String content =dtolist.get(i).getContent();
-            String reply=dtolist.get(i).getReply();
-            String like=dtolist.get(i).getLike();
-            String readCount=dtolist.get(i).getReadCount();
-            String imgRes=dtolist.get(i).getImgRes();
             /*Log.d("게시판글","인덱스:"+index+",제목:"+title+",시간:"+date);*/
-            adapter.addItems(new BoardReplyDTO(index,title,content,id));
+            adapter.addItems(new BoardReplyDTO(index,content,id,date));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        getList();
+        replyList.setAdapter(adapter);
+        super.onResume();
     }
 }

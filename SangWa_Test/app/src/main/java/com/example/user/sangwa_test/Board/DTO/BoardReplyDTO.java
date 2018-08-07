@@ -3,34 +3,27 @@ package com.example.user.sangwa_test.Board.DTO;
 public class BoardReplyDTO {
     private int parentid;
     private int index;
-    private String title;
     private String content;
     private String id;
+    private String date;
+
 
     public BoardReplyDTO() {
     }
 
-    public BoardReplyDTO(int index, String title, String content, String id) {
+    public BoardReplyDTO(int index, String content, String id, String date) {
         this.index = index;
-        this.title = title;
         this.content = content;
         this.id = id;
+        this.date = date;
     }
 
-    public BoardReplyDTO(int parentid, int index, String title, String content, String id) {
+    public BoardReplyDTO(int parentid, int index, String content, String id, String date) {
         this.parentid = parentid;
         this.index = index;
-        this.title = title;
         this.content = content;
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+        this.date = date;
     }
 
     public String getContent() {
@@ -63,5 +56,13 @@ public class BoardReplyDTO {
 
     public void setParentid(int parentid) {
         this.parentid = parentid;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

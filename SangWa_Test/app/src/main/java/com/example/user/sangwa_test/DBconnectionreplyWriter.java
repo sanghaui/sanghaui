@@ -41,7 +41,6 @@ public class DBconnectionreplyWriter extends AsyncTask<Void,Void,Void>{
 
     public void insert(BoardReplyDTO dto){
         this.id = dto.getId();
-        this.title = dto.getTitle();
         this.content = dto.getContent();
         this.index = dto.getParentid();
     }
