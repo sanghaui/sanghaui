@@ -47,12 +47,12 @@ public class BoardReplyAdapter extends BaseAdapter {
         convertView = inflater.inflate(R.layout.board_reply_item,parent,false);
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-        TextView titleText = (TextView) convertView.findViewById(R.id.noticeTitleText) ;
+        TextView dateText = (TextView) convertView.findViewById(R.id.noticeDateText) ;
         TextView idText = (TextView) convertView.findViewById(R.id.noticeIdText) ;
         TextView contentText= (TextView) convertView.findViewById(R.id.noticeContentText) ;
 
         BoardReplyDTO item = BoardItems.get(position);
-        titleText.setText(item.getTitle());
+        dateText.setText(item.getDate());
         idText.setText(item.getId());
         contentText.setText(item.getContent());
 

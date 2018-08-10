@@ -97,7 +97,7 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
                      node = node.getNextSibling()) {
 
                     //첫번째 자식을 시작으로 마지막까지 다음 형제를 실행
-                    if (node.getNodeName().equals("index")) {
+                    if (node.getNodeName().equals("b_index")) {
                         index = Integer.parseInt(node.getTextContent());
                     } else if (node.getNodeName().equals("b_id")) {
                         id = node.getTextContent();
@@ -116,9 +116,9 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
                     }else if (node.getNodeName().equals("imgRes")) {
                         imgRes = node.getTextContent();
                     }
-                    Log.d("DB에서받은값", "title:" + title + ",id:" + id + ",date:" + date+",title:"+title+",content:"+content+",rep:"+reply+",img:"+imgRes);
                 }
                 if (!id.equals("")) {
+                    Log.d("DB에서받은값", "index:" + index);
                     sangWaDTOArrayList.add(new SangWaDTO(index,id,title,content,date,reply,like,readCount,imgRes));
                     /*adapter.addItems(new SangWaDTO(id, name, date));*/
                 }
@@ -143,24 +143,9 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
             objDocumentBuilder = objDocumentBuilderFactory.newDocumentBuilder();
             doc = objDocumentBuilder.parse(stream);
         } catch (Exception ex) {
-            //Log.d("BB", ex.getMessage());
         }
         return doc;
     }
 
-   /* public void imageLoader() {
-        //이미지 로드 메서드
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.blank) // 기본이미지
-                .showImageForEmptyUri(R.drawable.blank) // 주소가 없을 경우
-                .showImageOnFail(R.drawable.blank)// 실패했을 경우
-                .build();
-
-        ImageLoaderConfiguration config =
-                new ImageLoaderConfiguration.Builder(context)
-                        .defaultDisplayImageOptions(options)
-                        .build();
-        imageLoader.getInstance().init(config);
-    }*/
 
 }

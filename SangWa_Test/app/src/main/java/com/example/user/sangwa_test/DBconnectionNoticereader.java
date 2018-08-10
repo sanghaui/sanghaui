@@ -32,11 +32,12 @@ public class DBconnectionNoticereader extends AsyncTask<Void, Void, ArrayList<Sa
     private String pw;
     private String title;
     private String content;
-    private String b_date;
+    private String date;
     private String reply;
     private String like;
     private String readCount;
     private String imgRes;
+    private int index;
     /*BoardAdapter adapter = new BoardAdapter();*/
 
     ArrayList<SangWaDTO> sangWaDTOArrayList = new ArrayList<>();
@@ -52,11 +53,12 @@ public class DBconnectionNoticereader extends AsyncTask<Void, Void, ArrayList<Sa
         this.pw = dto.getPw();
         this.title = dto.getTitle();
         this.content = dto.getContent();
-        this.b_date = dto.getDate();
+        this.date = dto.getDate();
         this.reply = dto.getReply();
         this.like = dto.getLike();
         this.readCount = dto.getReadCount();
         this.imgRes = dto.getImgRes();
+        this.index = dto.getIndex();
     }
 
     @Override
@@ -94,14 +96,16 @@ public class DBconnectionNoticereader extends AsyncTask<Void, Void, ArrayList<Sa
                     } else if (node.getNodeName().equals("b_content")) {
                         content = node.getTextContent();
                     }else if (node.getNodeName().equals("b_date")) {
-                        b_date = node.getTextContent();
+                        date = node.getTextContent();
                     }else if (node.getNodeName().equals("b_readcount")) {
                         readCount = node.getTextContent();
+                    }else if (node.getNodeName().equals("b_num")) {
+                        index = Integer.parseInt(node.getTextContent());
                     }
-                    Log.d("DB에서받은값","title:"+title+",id:"+id+",date:"+b_date);
+                    Log.d("공지사항DB","title:"+title+",id:"+id+",date:"+date+",readcount"+readCount+",index:"+index);
                 }
                 if (!id.equals("")) {
-                    sangWaDTOArrayList.add(new SangWaDTO(id, title, content,date));
+                    sangWaDTOArrayList.add(new SangWaDTO(index, id, title, content,date,readCount));
                     /*adapter.addItems(new SangWaDTO(id, name, date));*/
                 }
             }
@@ -115,6 +119,7 @@ public class DBconnectionNoticereader extends AsyncTask<Void, Void, ArrayList<Sa
         return sangWaDTOArrayList;
     }
 
+    //XML 파싱
     private Document parseXML(InputStream stream) throws Exception {
         DocumentBuilderFactory objDocumentBuilderFactory = null;
         DocumentBuilder objDocumentBuilder = null;

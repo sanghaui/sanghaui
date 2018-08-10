@@ -1,4 +1,4 @@
-package com.example.user.sangwa_test.Board.DTO;
+package com.example.home.sample.Board;
 
 public class NoticeDTO {
     private String title;
