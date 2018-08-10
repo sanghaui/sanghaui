@@ -90,29 +90,32 @@ public class Mainfragment extends Fragment {
         //adapter 생성
         adapter = new MainAdapter();
         String id = "", title = "", date = "", img = "", content = "";
-        int index = 0;
+        int index = 0, like = 0;
+        int toplike = dtolist.get(0).getLike();
         int topindex = dtolist.get(0).getIndex();
         //배열을 풀어 각각에 리스트에 삽입
         for (int i = 1; i < dtolist.size(); i++) {
 
-
-            index = dtolist.get(i).getIndex();
-            if (topindex < index){
-                topindex = index;
+        //좋아요가 가장 높은 게시글의 인덱스를 찾음
+            if (toplike < dtolist.get(i).getLike()){
+                toplike = dtolist.get(i).getLike();
+                topindex = dtolist.get(i).getIndex();
             }
 
-            Log.d("게시판글","아이디:"+id+",제목:"+title+",시간:"+date +",이미지:"+img);
+            Log.d("메인프레그","아이디:"+id+", 제목:"+title+", 시간:"+date +", 이미지:"+img  +", toplike:" + toplike);
         }
         for (int j = 0; j < dtolist.size(); j++){
-            if (dtolist.get(j).getIndex() == topindex){
+            if (dtolist.get(j).getLike() == toplike && dtolist.get(j).getIndex() == topindex){
                 id = dtolist.get(j).getId();
                 title = dtolist.get(j).getTitle();
                 date = dtolist.get(j).getDate();
                 img = dtolist.get(j).getImgRes();
                 content = dtolist.get(j).getContent();
+                like = dtolist.get(j).getLike();
+                index = dtolist.get(j).getIndex();
             }
         }
-        adapter.addItems(new SangWaDTO(id,title,date,img,content,topindex));
+        adapter.addItems(new SangWaDTO(id,title,date,img,content,index, like));
 
     }
 

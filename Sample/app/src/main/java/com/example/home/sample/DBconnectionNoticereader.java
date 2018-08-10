@@ -31,7 +31,7 @@ public class DBconnectionNoticereader extends AsyncTask<Void, Void, ArrayList<Sa
     private String content;
     private String date;
     private String reply;
-    private String like;
+    private int like;
     private String readCount;
     private String imgRes;
     private int index;

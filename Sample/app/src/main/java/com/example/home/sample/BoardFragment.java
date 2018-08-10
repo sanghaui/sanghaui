@@ -208,8 +208,9 @@ public class BoardFragment extends Fragment {
                 String img = dtolist.get(i).getImgRes();
                 String content = dtolist.get(i).getContent();
                 int index = dtolist.get(i).getIndex();
+                int like = dtolist.get(i).getLike();
                 Log.d("게시판글", "아이디:" + id + ",제목:" + title + ",시간:" + date);
-                adapter.addItems(new SangWaDTO(id, title, date, img, content, index));
+                adapter.addItems(new SangWaDTO(id, title, date, img, content, index, like));
             }
         }
 

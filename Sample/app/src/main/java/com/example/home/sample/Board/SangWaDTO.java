@@ -7,7 +7,7 @@ public class SangWaDTO {
     private String content;
     private String date;
     private String reply;
-    private String like;
+    private int like;
     private String readCount;
     private String imgRes;
     private int index;
@@ -30,13 +30,14 @@ public class SangWaDTO {
         this.date = date;
     }
 
-    public SangWaDTO(String id, String title, String date, String imgRes, String content, int index) {
+    public SangWaDTO(String id, String title, String date, String imgRes, String content, int index, int like) {
         this.id = id;
         this.title = title;
         this.date = date;
         this.imgRes = imgRes;
         this.content = content;
         this.index = index;
+        this.like = like;
     }
 
     public SangWaDTO(int index, String id, String title, String content, String date, String readCount) {
@@ -108,11 +109,11 @@ public class SangWaDTO {
         this.reply = reply;
     }
 
-    public String getLike() {
+    public int getLike() {
         return like;
     }
 
-    public void setLike(String like) {
+    public void setLike(int like) {
         this.like = like;
     }
 

@@ -25,7 +25,7 @@ public class DBconnectionWriter extends AsyncTask<Void,Void,Void>{
     private String content;
     private String date;
     private String reply;
-    private String like;
+    private int like;
     private String readCount;
     private String imgRes;
     private String encodedImage;

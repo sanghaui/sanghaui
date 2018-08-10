@@ -33,7 +33,7 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
     private String content;
     private String date;
     private String reply;
-    private String like;
+    private int like;
     private String readCount;
     private String imgRes;
     /*BoardAdapter adapter = new BoardAdapter();*/
@@ -81,7 +81,7 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
 
             for (int i = 0; i < descNodes.getLength(); i++) {
                 String id = "", name = "", date = "", image = "", content = "";
-                int index = 0;
+                int index = 0, like = 0;
                 for (Node node = descNodes.item(i).getFirstChild();
                      node != null;
                      node = node.getNextSibling()) {
@@ -99,11 +99,13 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
                         content = node.getTextContent();
                     } else if (node.getNodeName().equals("b_index")) {
                         index = Integer.parseInt(node.getTextContent());
+                    } else if (node.getNodeName().equals("b_like")) {
+                        like = Integer.parseInt(node.getTextContent());
                     }
-                        Log.d("DB에서받은값","title:"+title+", id:"+id+", date:"+date + ", imgRes : " + imgRes + ", content : " + content + ", index : " + index);
+                        Log.d("DB에서받은값","title:"+title+", id:"+id+", date:"+date + ", imgRes : " + imgRes + ", content : " + content + ", index : " + index + ", like: " + like);
                 }
                 if (!id.equals("")) {
-                    sangWaDTOArrayList.add(new SangWaDTO(id, title, date,imgRes,content,index));
+                    sangWaDTOArrayList.add(new SangWaDTO(id, title, date,imgRes,content,index, like));
                     /*adapter.addItems(new SangWaDTO(id, name, date));*/
                 }
             }
