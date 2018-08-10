@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     BoardFragment boardFragment;
     CoordiFragment coordiFragment;
     Sub3Fragment sub3Fragment;
-    String login = null;
+    String login = "";
 
     String folder = "cordi";
     String top = "top";
@@ -132,12 +132,13 @@ public class MainActivity extends AppCompatActivity {
     //메뉴바 추가
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //service에서 로그인값 받아오기
         /*login=(String)getSystemService(login);*/
-        /*if (login.equals("")){
+        if (login.equals("")){
             getMenuInflater().inflate(R.menu.menu_main, menu);
         } else {
             getMenuInflater().inflate(R.menu.menu_afterlogin, menu);
-        }*/
+        }
 
 
 
