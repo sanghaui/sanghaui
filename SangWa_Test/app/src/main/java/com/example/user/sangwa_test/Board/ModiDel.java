@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.user.sangwa_test.DBconnectionDeleter;
+import com.example.user.sangwa_test.R;
 
 public class ModiDel extends AppCompatActivity {
     Button modify, delete;
