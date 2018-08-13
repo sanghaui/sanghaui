@@ -62,7 +62,6 @@
         android:orientation="horizontal"
         android:weightSum="5"
         >
-
         <Button
             android:id="@+id/imageLoad"
             android:layout_width="0dp"

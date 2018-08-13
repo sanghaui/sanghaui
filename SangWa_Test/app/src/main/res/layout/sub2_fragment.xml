@@ -3,26 +3,21 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
     <Button
         android:id="@+id/boardbutton"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/sub2_board1"
         android:layout_weight="1"
-        />
+        android:background="?android:attr/panelBackground"
+        android:text="게시판" />
 
     <Button
         android:id="@+id/noticebutton"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/sub2_notice"
         android:layout_weight="1"
-        />
-
-    </LinearLayout>
+        android:background="?android:attr/panelBackground"
+        android:text="공지사항" />
 </LinearLayout>
