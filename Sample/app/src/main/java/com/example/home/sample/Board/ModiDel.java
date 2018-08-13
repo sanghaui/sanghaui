@@ -1,4 +1,4 @@
-package com.example.user.sangwa_test.Board;
+package com.example.home.sample.Board;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.user.sangwa_test.DBconnectionDeleter;
+import com.example.home.sample.BoardFragment;
+import com.example.home.sample.DBconnectionDeleter;
+import com.example.home.sample.R;
 
 public class ModiDel extends AppCompatActivity {
     Button modify, delete;
