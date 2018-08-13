@@ -19,7 +19,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="textPersonName"
-            android:hint="제목" />
+            android:text="제목" />
 
         <EditText
             android:id="@+id/editid"
@@ -28,7 +28,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="textPersonName"
-            android:hint="글쓴이" />
+            android:text="글쓴이" />
     </LinearLayout>
 
     <LinearLayout
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:hint="비밀번호" />
+            android:text="비밀번호" />
 
         <EditText
             android:id="@+id/editContent"
@@ -51,7 +51,7 @@
             android:layout_height="match_parent"
             android:ems="10"
             android:inputType="textPersonName"
-            android:hint="내용" />
+            android:text="내용" />
 
     </LinearLayout>
 
