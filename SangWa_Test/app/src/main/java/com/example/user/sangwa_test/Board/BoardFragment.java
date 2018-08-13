@@ -57,6 +57,7 @@ public class BoardFragment extends Fragment {
         //스피너 설정
         String[] b_list = {"제목", "작성자", "내용"};
         b_spinner = board.findViewById(R.id.b_spinner);
+
         spinnerAdapter= new ArrayAdapter<CharSequence>(getActivity(),android.R.layout.simple_spinner_item,b_list);
         b_spinner.setAdapter(spinnerAdapter);
         b_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -70,6 +71,8 @@ public class BoardFragment extends Fragment {
                     adapter.insertSearch("id");
                 }else if(searchTextresult.equals("내용")){
                     adapter.insertSearch("content");
+                }else {
+                    adapter.insertSearch("title");
                 }
             }
             @Override
@@ -116,7 +119,6 @@ public class BoardFragment extends Fragment {
                 dto = (SangWaDTO) adapter.getItem(position);
                 Intent boardTouch = new Intent(getContext(), BoardTouchActivity.class);
                 /*boardTouch.putExtra("tag", "touch");*/
-                Log.d("보드프레그먼트",String.valueOf(dto.getIndex()));
                 int index = dto.getIndex();
                 boardTouch.putExtra("index",index);
                 boardTouch.putExtra("id",dto.getId());
@@ -125,6 +127,7 @@ public class BoardFragment extends Fragment {
                 boardTouch.putExtra("title",dto.getTitle());
                 boardTouch.putExtra("date",dto.getDate());
                 boardTouch.putExtra("imgRes",dto.getImgRes());
+                boardTouch.putExtra("readCount",dto.getReadCount());
                 startActivity(boardTouch);
             }
         });
@@ -148,16 +151,6 @@ public class BoardFragment extends Fragment {
             }
         });
 
-
-        boardList.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-
-
-                return false;
-            }
-        });
-
         //글쓰기버튼
         writeButton = board.findViewById(R.id.writeButton);
         writeButton.setOnClickListener(new View.OnClickListener() {
@@ -175,9 +168,9 @@ public class BoardFragment extends Fragment {
         getList();
         boardList.setAdapter(adapter);
         searchText.setText("");
+        b_spinner.setSelection(0);
         super.onResume();
     }
-
 
     public void getList(){
         //DB에서 값 받아옴
@@ -203,10 +196,10 @@ public class BoardFragment extends Fragment {
             String date =dtolist.get(i).getDate();
             String content =dtolist.get(i).getContent();
             String reply=dtolist.get(i).getReply();
-            String like=dtolist.get(i).getLike();
-            String readCount=dtolist.get(i).getReadCount();
+            int like=dtolist.get(i).getLike();
+            int readCount=dtolist.get(i).getReadCount();
             String imgRes=dtolist.get(i).getImgRes();
-            /*Log.d("게시판글","인덱스:"+index+",제목:"+title+",시간:"+date);*/
+            Log.d("게시판글","인덱스:"+index+",조회수:"+readCount+",시간:"+date);
             adapter.addItems(new SangWaDTO(index,id,title,content,date,reply,like,readCount,imgRes));
         }
     }

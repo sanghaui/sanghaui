@@ -8,10 +8,11 @@ public class SangWaDTO {
     private String content;
     private String date;
     private String reply;
-    private String like;
-    private String readCount;
+    private int like;
+    private int readCount;
     private String imgRes;
     private String encodedImage;
+    private  String likecount;
 
 
     //빈생성자
@@ -30,7 +31,7 @@ public class SangWaDTO {
         this.date = date;
     }
 
-    public SangWaDTO(int index, String id, String title, String content, String date, String reply, String like, String readCount, String imgRes) {
+    public SangWaDTO(int index, String id, String title, String content, String date, String reply, int like, int readCount, String imgRes) {
         this.index = index;
         this.id = id;
         this.title = title;
@@ -42,7 +43,7 @@ public class SangWaDTO {
         this.imgRes = imgRes;
     }
 
-    public SangWaDTO(int index, String id, String title, String content, String date, String readCount) {
+    public SangWaDTO(int index, String id, String title, String content, String date, int readCount) {
         this.index = index;
         this.id = id;
         this.title = title;
@@ -63,6 +64,14 @@ public class SangWaDTO {
 
     //getter & setter
 
+
+    public String getLikecount() {
+        return likecount;
+    }
+
+    public void setLikecount(String likecount) {
+        this.likecount = likecount;
+    }
 
     public String getId() {
         return id;
@@ -112,19 +121,19 @@ public class SangWaDTO {
         this.reply = reply;
     }
 
-    public String getLike() {
+    public int getLike() {
         return like;
     }
 
-    public void setLike(String like) {
+    public void setLike(int like) {
         this.like = like;
     }
 
-    public String getReadCount() {
+    public int getReadCount() {
         return readCount;
     }
 
-    public void setReadCount(String readCount) {
+    public void setReadCount(int readCount) {
         this.readCount = readCount;
     }
 

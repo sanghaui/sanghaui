@@ -36,8 +36,8 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
     private String content;
     private String date;
     private String reply;
-    private String like;
-    private String readCount;
+    private int like;
+    private int readCount;
     private String imgRes;
     private int index;
     private Context context;
@@ -110,15 +110,15 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
                     }else if (node.getNodeName().equals("b_reply")) {
                         reply = node.getTextContent();
                     }else if (node.getNodeName().equals("b_like")) {
-                        like = node.getTextContent();
-                    }else if (node.getNodeName().equals("readCount")) {
-                        readCount = node.getTextContent();
+                        like = Integer.parseInt(node.getTextContent());
+                    }else if (node.getNodeName().equals("b_readcount")) {
+                        readCount = Integer.parseInt(node.getTextContent());
                     }else if (node.getNodeName().equals("imgRes")) {
                         imgRes = node.getTextContent();
                     }
                 }
                 if (!id.equals("")) {
-                    Log.d("DB에서받은값", "index:" + index);
+                    Log.d("DB에서받은값", "index:"+index+"read:"+readCount);
                     sangWaDTOArrayList.add(new SangWaDTO(index,id,title,content,date,reply,like,readCount,imgRes));
                     /*adapter.addItems(new SangWaDTO(id, name, date));*/
                 }
@@ -129,7 +129,6 @@ public class DBconnectionreader extends AsyncTask<Void, Void, ArrayList<SangWaDT
             e.printStackTrace();
             Log.d("접속", "디비커넥션 오류");
         }
-
         return sangWaDTOArrayList;
     }
 

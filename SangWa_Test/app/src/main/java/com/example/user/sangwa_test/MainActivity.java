@@ -12,7 +12,7 @@ import com.example.user.sangwa_test.Board.NoticeFragment;
 public class MainActivity extends AppCompatActivity {
     Button closet;
     Button commu;
-
+    public static String userID;
     Sub1Fragment sub1Fragment;
     Sub2Fragment sub2Fragment;
     BoardFragment boardFragment;
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        userID="테스터";
         closet = findViewById(R.id.closet);
         commu = findViewById(R.id.commu);
 

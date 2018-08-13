@@ -39,14 +39,8 @@ public class MyService extends Service {
 
     public void processinsert(Intent insert){
 
-
         String editid = insert.getStringExtra("editid");
-        String editpw = insert.getStringExtra("editpw");
-        String editTitle = insert.getStringExtra("editTitle");
-        String editContent = insert.getStringExtra("editContent");
-        //DB 연결
 
-        Log.d(Tag,"id"+editid+"editpw"+editpw+"editTitle"+editTitle+"editContent"+editContent);
 
     }
 }

@@ -11,12 +11,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.user.sangwa_test.Board.Adapters.BoardAdapter;
 import com.example.user.sangwa_test.Board.Adapters.BoardReplyAdapter;
 import com.example.user.sangwa_test.Board.DTO.BoardReplyDTO;
 import com.example.user.sangwa_test.Board.DTO.SangWaDTO;
+import com.example.user.sangwa_test.DBconnectionLike;
+import com.example.user.sangwa_test.DBconnectionLikeCheck;
 import com.example.user.sangwa_test.DBconnectionReplyreader;
-import com.example.user.sangwa_test.DBconnectionreader;
 import com.example.user.sangwa_test.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -26,14 +26,15 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class BoardTouchActivity extends AppCompatActivity{
-    Button toBoardItem, mkreply;
-    TextView texttitle, textcontent,textid;
+public class BoardTouchActivity extends AppCompatActivity {
+    Button toBoardItem, mkreply, like_btn;
+    TextView texttitle, textcontent, textid;
     ListView replyList;
     BoardReplyAdapter adapter;
     ImageView imageView1;
     ArrayList<BoardReplyDTO> dtolist;
     DBconnectionReplyreader reader;
+    String check_like;
 
 
     //이미지로더
@@ -49,6 +50,7 @@ public class BoardTouchActivity extends AppCompatActivity{
     private String like;
     private int readCount;
     private String imgRes;
+    private int likeCh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,17 +63,65 @@ public class BoardTouchActivity extends AppCompatActivity{
         textcontent = findViewById(R.id.textcontent);
         mkreply = findViewById(R.id.mkreply);
         imageView1 = findViewById(R.id.imageView1);
+        like_btn = findViewById(R.id.like_btn);
 
 
         final Intent intent = getIntent();
         process(intent);
+        //좋아요 확인 처리
+        DBconnectionLikeCheck db = new DBconnectionLikeCheck();
+        db.insert(index,id);
+        try {
+        likeCh = db.execute().get();
+        if(likeCh==0){
+            check_like = "unpressed" ;
+        }else{
+            check_like = "pressed";
+        }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        //좋아요 버튼 처리
+
+        if (check_like.equals("unpressed")) {
+            like_btn.setSelected(false);
+        }else{
+            like_btn.setSelected(true);
+        }
 
 
+        like_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (check_like.equals("unpressed")) {
+                    like_btn.setSelected(true);
+                    check_like = "pressed";
+                } else {
+                    like_btn.setSelected(false);
+                    check_like = "unpressed";
+                }
+            }
+        });
 
 
         toBoardItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DBconnectionLike db = new DBconnectionLike();
+                SangWaDTO dto = new SangWaDTO();
+                dto.setIndex(index);
+                dto.setId(id);
+                dto.setLikecount(check_like);
+                Log.d("터치화면","조회수:"+readCount);
+                //조회수 추가 처리
+                if (readCount == 0) {
+                    dto.setReadCount(1);
+                } else {
+                    dto.setReadCount(readCount + 1);
+                }
+                db.insert(dto);
+                db.execute();
                 finish();
             }
         });
@@ -79,8 +129,8 @@ public class BoardTouchActivity extends AppCompatActivity{
         mkreply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent reply= new Intent(getApplicationContext(),TextrelayActivity.class);
-                reply.putExtra("index",index);
+                Intent reply = new Intent(getApplicationContext(), TextrelayActivity.class);
+                reply.putExtra("index", index);
                 startActivity(reply);
             }
         });
@@ -91,14 +141,14 @@ public class BoardTouchActivity extends AppCompatActivity{
         replyList.setAdapter(adapter);
     }
 
-    public void process(Intent data){
-        index = data.getIntExtra("index",0);
-        id =data.getStringExtra("id");
-        pw =data.getStringExtra("pw");
-        title =data.getStringExtra("title");
-        content =data.getStringExtra("content");
-        imgRes =data.getStringExtra("imgRes");
-        Log.d("터치",id+pw+title+content);
+    public void process(Intent data) {
+        index = data.getIntExtra("index", 0);
+        id = data.getStringExtra("id");
+        pw = data.getStringExtra("pw");
+        title = data.getStringExtra("title");
+        content = data.getStringExtra("content");
+        imgRes = data.getStringExtra("imgRes");
+        readCount = data.getIntExtra("readCount", 0);
         textid.setText(id);
         texttitle.setText(title);
         textcontent.setText(content);
@@ -142,12 +192,12 @@ public class BoardTouchActivity extends AppCompatActivity{
     }
 
 
-    public void getList(){
+    public void getList() {
         //DB에서 값 받아옴
         reader = new DBconnectionReplyreader();
-        reader.insert(index);
+        reader.insert(index);   //게시글 인덱스
         try {
-            dtolist=reader.execute().get();
+            dtolist = reader.execute().get();
             Log.d("반환값", String.valueOf(dtolist.size()));
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -157,17 +207,17 @@ public class BoardTouchActivity extends AppCompatActivity{
 
         //adapter 생성
         adapter = new BoardReplyAdapter();
-        Log.d("어뎁터","생성");
+        Log.d("어뎁터", "생성");
 
         //배열을 풀어 각각에 리스트에 삽입
-        for(int i = 0 ; i < dtolist.size() ; i++){
+        for (int i = 0; i < dtolist.size(); i++) {
             int index = dtolist.get(i).getIndex();
             String id = dtolist.get(i).getId();
             String date = dtolist.get(i).getDate();
             /*String date =dtolist.get(i).getDate();*/
-            String content =dtolist.get(i).getContent();
+            String content = dtolist.get(i).getContent();
             /*Log.d("게시판글","인덱스:"+index+",제목:"+title+",시간:"+date);*/
-            adapter.addItems(new BoardReplyDTO(index,content,id,date));
+            adapter.addItems(new BoardReplyDTO(index, content, id, date));
         }
     }
 

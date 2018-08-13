@@ -86,7 +86,7 @@ public class NoticeFragment extends Fragment {
             String title = dtolist.get(i).getTitle();
             String date =dtolist.get(i).getDate();
             String content = dtolist.get(i).getContent();
-            String readcount = dtolist.get(i).getReadCount();
+            int readcount = dtolist.get(i).getReadCount();
             Log.d("공지사항","아이디:"+id+",제목:"+title+",시간:"+date+",내용"+content);
             adapter.addItems(new SangWaDTO(index,id,title,date,content,readcount));
         }
