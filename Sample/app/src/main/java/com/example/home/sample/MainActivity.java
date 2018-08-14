@@ -132,15 +132,13 @@ public class MainActivity extends AppCompatActivity {
     //메뉴바 추가
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //service에서 로그인값 받아오기
+        //service에서 로그인id값 받아오기
         /*login=(String)getSystemService(login);*/
         if (login.equals("")){
             getMenuInflater().inflate(R.menu.menu_main, menu);
         } else {
             getMenuInflater().inflate(R.menu.menu_afterlogin, menu);
         }
-
-
 
         return true;
     }

@@ -216,6 +216,17 @@ public class BoardFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        getList();
+        boardList.setAdapter(adapter);
+        b_spinner.setSelection(0);
+        searchText.setText("");
+
+
+        super.onResume();
+    }
+
     //프래그먼트 갱신
     public void refresh(){
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
