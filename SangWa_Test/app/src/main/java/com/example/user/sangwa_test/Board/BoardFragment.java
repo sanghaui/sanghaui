@@ -19,17 +19,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.user.sangwa_test.Board.Adapters.BoardAdapter;
 import com.example.user.sangwa_test.Board.DTO.SangWaDTO;
 import com.example.user.sangwa_test.DBconnectionDeleter;
 import com.example.user.sangwa_test.DBconnectionreader;
+import com.example.user.sangwa_test.MainActivity;
 import com.example.user.sangwa_test.R;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class BoardFragment extends Fragment {
+
+    String userId;
+
 
     Button writeButton;
     BoardAdapter adapter;
@@ -48,8 +53,8 @@ public class BoardFragment extends Fragment {
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup board = (ViewGroup) inflater.inflate(R.layout.board_fragment, container, false);
         /*MainActivity activity = (MainActivity) getActivity();*/
-
         /*context =activity.getApplicationContext();*/
+        userId = "test";
         getList();
         //리스트 검색
 
@@ -58,23 +63,24 @@ public class BoardFragment extends Fragment {
         String[] b_list = {"제목", "작성자", "내용"};
         b_spinner = board.findViewById(R.id.b_spinner);
 
-        spinnerAdapter= new ArrayAdapter<CharSequence>(getActivity(),android.R.layout.simple_spinner_item,b_list);
+        spinnerAdapter = new ArrayAdapter<CharSequence>(getActivity(), android.R.layout.simple_spinner_item, b_list);
         b_spinner.setAdapter(spinnerAdapter);
         b_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("스피너선택값",b_spinner.getSelectedItem().toString());
-                searchTextresult=b_spinner.getSelectedItem().toString();
-                if(searchTextresult.equals("제목")){
+                Log.d("스피너선택값", b_spinner.getSelectedItem().toString());
+                searchTextresult = b_spinner.getSelectedItem().toString();
+                if (searchTextresult.equals("제목")) {
                     adapter.insertSearch("title");
-                }else if(searchTextresult.equals("작성자")){
+                } else if (searchTextresult.equals("작성자")) {
                     adapter.insertSearch("id");
-                }else if(searchTextresult.equals("내용")){
+                } else if (searchTextresult.equals("내용")) {
                     adapter.insertSearch("content");
-                }else {
+                } else {
                     adapter.insertSearch("title");
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -86,7 +92,7 @@ public class BoardFragment extends Fragment {
         boardList.setAdapter(adapter);
 
 
-        searchText =board.findViewById(R.id.searchText);
+        searchText = board.findViewById(R.id.searchText);
         searchText.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -103,10 +109,10 @@ public class BoardFragment extends Fragment {
             public void afterTextChanged(Editable search) {
                 //검색어 변경시 처리
                 String filterText = search.toString();
-                Log.d("검색어 길이",filterText);
-                if(filterText.length()>0){
+                Log.d("검색어 길이", filterText);
+                if (filterText.length() > 0) {
                     boardList.setFilterText(filterText);
-                }else{
+                } else {
                     boardList.clearTextFilter();
                 }
             }
@@ -120,15 +126,16 @@ public class BoardFragment extends Fragment {
                 Intent boardTouch = new Intent(getContext(), BoardTouchActivity.class);
                 /*boardTouch.putExtra("tag", "touch");*/
                 int index = dto.getIndex();
-                boardTouch.putExtra("index",index);
-                boardTouch.putExtra("id",dto.getId());
-                boardTouch.putExtra("pw",dto.getPw());
-                boardTouch.putExtra("content",dto.getContent());
-                boardTouch.putExtra("title",dto.getTitle());
-                boardTouch.putExtra("date",dto.getDate());
-                boardTouch.putExtra("imgRes",dto.getImgRes());
-                boardTouch.putExtra("readCount",dto.getReadCount());
+                boardTouch.putExtra("index", index);
+                boardTouch.putExtra("id", userId);
+                boardTouch.putExtra("pw", dto.getPw());
+                boardTouch.putExtra("content", dto.getContent());
+                boardTouch.putExtra("title", dto.getTitle());
+                boardTouch.putExtra("date", dto.getDate());
+                boardTouch.putExtra("imgRes", dto.getImgRes());
+                boardTouch.putExtra("readCount", dto.getReadCount());
                 startActivity(boardTouch);
+
             }
         });
 
@@ -139,14 +146,17 @@ public class BoardFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 deleter = new DBconnectionDeleter();
                 dto = (SangWaDTO) adapter.getItem(position);
-
-                Intent intent = new Intent(getContext(),ModiDel.class);
-                intent.putExtra("index",dto.getIndex());
-                intent.putExtra("id",dto.getId());
-                intent.putExtra("title",dto.getTitle());
-                intent.putExtra("content",dto.getContent());
-                intent.putExtra("imgRes",dto.getImgRes());
-                startActivity(intent);
+                if (!userId.equals(dto.getId())) {
+                    Toast.makeText(getContext(), "작성자 아이디가 일치 하지 않습니다", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(getContext(), ModiDel.class);
+                    intent.putExtra("index", dto.getIndex());
+                    intent.putExtra("id", userId);
+                    intent.putExtra("title", dto.getTitle());
+                    intent.putExtra("content", dto.getContent());
+                    intent.putExtra("imgRes", dto.getImgRes());
+                    startActivity(intent);
+                }
                 return true;
             }
         });
@@ -157,6 +167,7 @@ public class BoardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent writer = new Intent(getContext(), BoardWriter.class);
+                writer.putExtra("id", userId);
                 startActivity(writer);
             }
         });
@@ -172,11 +183,12 @@ public class BoardFragment extends Fragment {
         super.onResume();
     }
 
-    public void getList(){
+
+    public void getList() {
         //DB에서 값 받아옴
         DBconnectionreader reader = new DBconnectionreader();
         try {
-            dtolist=reader.execute().get();
+            dtolist = reader.execute().get();
             Log.d("반환값", String.valueOf(dtolist.size()));
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -186,26 +198,26 @@ public class BoardFragment extends Fragment {
 
         //adapter 생성
         adapter = new BoardAdapter();
-        Log.d("어뎁터","생성");
+        Log.d("어뎁터", "생성");
 
         //배열을 풀어 각각에 리스트에 삽입
-        for(int i = 0 ; i < dtolist.size() ; i++){
+        for (int i = 0; i < dtolist.size(); i++) {
             int index = dtolist.get(i).getIndex();
             String id = dtolist.get(i).getId();
             String title = dtolist.get(i).getTitle();
-            String date =dtolist.get(i).getDate();
-            String content =dtolist.get(i).getContent();
-            String reply=dtolist.get(i).getReply();
-            int like=dtolist.get(i).getLike();
-            int readCount=dtolist.get(i).getReadCount();
-            String imgRes=dtolist.get(i).getImgRes();
-            Log.d("게시판글","인덱스:"+index+",조회수:"+readCount+",시간:"+date);
-            adapter.addItems(new SangWaDTO(index,id,title,content,date,reply,like,readCount,imgRes));
+            String date = dtolist.get(i).getDate();
+            String content = dtolist.get(i).getContent();
+            String reply = dtolist.get(i).getReply();
+            int like = dtolist.get(i).getLike();
+            int readCount = dtolist.get(i).getReadCount();
+            String imgRes = dtolist.get(i).getImgRes();
+            Log.d("게시판글", "인덱스:" + index + ",조회수:" + readCount + ",시간:" + date);
+            adapter.addItems(new SangWaDTO(index, id, title, content, date, reply, like, readCount, imgRes));
         }
     }
 
     //프래그먼트 갱신
-    public void refresh(){
+    public void refresh() {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.detach(this).attach(this).commit();
 

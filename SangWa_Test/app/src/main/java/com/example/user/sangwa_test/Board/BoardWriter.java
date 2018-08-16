@@ -39,11 +39,18 @@ public class BoardWriter extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_writer);
 
+
+
         editTitle = findViewById(R.id.editTitle);
         editid = findViewById(R.id.editid);
         editContent = findViewById(R.id.editContent);
         editpw= findViewById(R.id.editpw);
         ImageRes = findViewById(R.id.ImageRes);
+
+        //아이디 할당
+        Intent intent = getIntent();
+        editid.setText(intent.getStringExtra("id"));
+
 
         submit = findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
